@@ -1,0 +1,6 @@
+#!/usr/local/bin/ruby -w
+
+require 'imap_cleanse'
+
+IMAPCleanse.run
+

@@ -1,0 +1,69 @@
+require 'imap_client'
+
+##
+# IMAPCleanse removes old messages from your IMAP mailboxes so you don't have
+# to!
+#
+# aka part one of my Plan for Total Email Domination.
+#
+# IMAPClient doesn't remove messages you haven't read nor messages you've
+# flagged.  See also IMAPFlag for automatic flagging goodness!
+
+class IMAPCleanse < IMAPClient
+
+  ##
+  # Handles processing of +args+.
+
+  def self.process_args(args)
+    extra_options = { :Age => [nil, 'Age option not set'] }
+
+    super args, extra_options do |opts, options|
+      opts.on("-a", "--age AGE",
+              "Delete messages more than AGE days old",
+              "Default: #{options[:Age].inspect}",
+              "Options file name: Age", Integer) do |age|
+        options[:Age] = age
+      end
+    end
+  end
+
+  ##
+  # Creates a new IMAPCleanse from +options+.
+  #
+  # Options include:
+  #   +:Age+:: Delete messages older than this many days ago
+  #
+  # and all options from IMAPClient
+
+  def initialize(options)
+    @before_date = (Time.now - 86400 * options[:Age]).imapdate
+    super
+  end
+
+  ##
+  # Removes read, unflagged messages from all selected mailboxes...
+
+  def run
+    super "Cleansing read, unflagged messages older than #{@before_date}",
+          [:Deleted] do
+      @imap.expunge
+      log "Expunged deleted messages"
+    end
+  end
+
+  private
+
+  ##
+  # Searches for read, unflagged messages older than :Age in the currently
+  # selected mailbox (see Net::IMAP#select).
+
+  def find_messages
+    search [
+      'NOT', 'NEW',
+      'NOT', 'FLAGGED',
+      'BEFORE', @before_date
+    ], 'read, unflagged messages'
+  end
+
+end
+

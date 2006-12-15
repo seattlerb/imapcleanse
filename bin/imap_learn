@@ -1,0 +1,6 @@
+#!/usr/local/bin/ruby -w
+
+require 'imap_learn'
+
+IMAPLearn.run
+

@@ -1,0 +1,18 @@
+1.2.0
+
+* Add some tests
+* Automatic auth detection
+* User-specified auth
+* Spy on multiple email addresses
+
+1.1.1
+
+* Fix some bugs with ~/.imap_cleanse
+
+1.1.0
+
+* imap_flag
+
+1.0.0
+
+* imap_cleanse

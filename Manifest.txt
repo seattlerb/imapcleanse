@@ -1,0 +1,10 @@
+LICENSE
+Manifest.txt
+README
+Rakefile
+bin/imap_cleanse
+bin/imap_flag
+lib/imap_cleanse.rb
+lib/imap_client.rb
+lib/imap_flag.rb
+lib/imap_sasl_plain.rb
