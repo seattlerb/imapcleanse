@@ -11,6 +11,11 @@ require 'optparse'
 class IMAPClient
 
   ##
+  # This is the version of IMAPClient you are using.
+
+  VERSION = '1.3.0'
+
+  ##
   # Handles processing of +args+.
 
   def self.process_args(args, extra_options)

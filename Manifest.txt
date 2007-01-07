@@ -1,10 +1,15 @@
-LICENSE
+History.txt
+LICENSE.txt
 Manifest.txt
-README
+README.txt
 Rakefile
 bin/imap_cleanse
 bin/imap_flag
+bin/imap_learn
 lib/imap_cleanse.rb
 lib/imap_client.rb
 lib/imap_flag.rb
+lib/imap_learn.rb
 lib/imap_sasl_plain.rb
+test/test_imap_client.rb
+test/test_imap_learn.rb

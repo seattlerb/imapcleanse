@@ -1,18 +1,24 @@
-1.2.0
+= 1.3.0 / 2007-01-07
+
+* Fixed #imapdate to match spec
+* Uses Hoe now
+* Added imap_learn (still needs tuning)
+
+= 1.2.0 / 2006-06-23
 
 * Add some tests
 * Automatic auth detection
 * User-specified auth
 * Spy on multiple email addresses
 
-1.1.1
+= 1.1.1 / 2006-05-08
 
 * Fix some bugs with ~/.imap_cleanse
 
-1.1.0
+= 1.1.0 / 2006-05-05
 
 * imap_flag
 
-1.0.0
+= 1.0.0 / 2006-03-28
 
 * imap_cleanse
