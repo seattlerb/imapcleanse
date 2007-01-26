@@ -15,16 +15,9 @@ class IMAPCleanse < IMAPClient
   # Handles processing of +args+.
 
   def self.process_args(args)
-    extra_options = { :Age => [nil, 'Age option not set'] }
+    extra_options = { }
 
-    super args, extra_options do |opts, options|
-      opts.on("-a", "--age AGE",
-              "Delete messages more than AGE days old",
-              "Default: #{options[:Age].inspect}",
-              "Options file name: Age", Integer) do |age|
-        options[:Age] = age
-      end
-    end
+    super args, extra_options
   end
 
   ##
@@ -36,7 +29,8 @@ class IMAPCleanse < IMAPClient
   # and all options from IMAPClient
 
   def initialize(options)
-    @before_date = (Time.now - 86400 * options[:Age]).imapdate
+    @cleanse = options[:cleanse]
+    @boxes = @cleanse.keys
     super
   end
 
@@ -44,7 +38,7 @@ class IMAPCleanse < IMAPClient
   # Removes read, unflagged messages from all selected mailboxes...
 
   def run
-    super "Cleansing read, unflagged messages older than #{@before_date}",
+    super "Cleansing read, unflagged old messages",
           [:Deleted] do
       @imap.expunge
       log "Expunged deleted messages"
@@ -58,10 +52,15 @@ class IMAPCleanse < IMAPClient
   # selected mailbox (see Net::IMAP#select).
 
   def find_messages
+    box = @boxes.find { |box| @mailbox =~ /#{box}/ } # TODO: needs more work
+    raise unless box
+    age = @cleanse[box]
+    before_date = (Time.now - 86400 * age).imapdate
+
     search [
       'NOT', 'NEW',
       'NOT', 'FLAGGED',
-      'BEFORE', @before_date
+      'BEFORE', before_date
     ], 'read, unflagged messages'
   end
 

@@ -30,16 +30,8 @@ class IMAPFlag < IMAPClient
   # Handles processing of +args+.
 
   def self.process_args(args)
-    extra_options = { :Email => [nil, 'Email address not set'] }
-
-    super args, extra_options do |opts, options|
-      opts.on("-e", "--email EMAIL",
-              "The email address you use to write email",
-              "Default: #{options[:Email].inspect}",
-              "Options file name: Email") do |email|
-        options[:Email] = email
-      end
-    end
+    extra_options = { }
+    super args, extra_options
   end
 
   ##
@@ -51,7 +43,8 @@ class IMAPFlag < IMAPClient
   # and all options from IMAPClient
 
   def initialize(options)
-    @email = options[:Email].split(/,\s*/)
+    @flag = options[:flag]
+    @boxes = @flag.keys
     super
   end
 
@@ -68,6 +61,10 @@ class IMAPFlag < IMAPClient
   # Searches for messages I answered and messages I wrote.
 
   def find_messages
+    @box = @boxes.find { |box| @mailbox =~ /#{box}/ } # TODO: needs more work
+    raise unless @box
+    @email = @flag[@box]
+    raise unless @email
     return [answered_in_curr, wrote_in_curr, responses_in_curr].flatten
   end
 

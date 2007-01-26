@@ -1,5 +1,6 @@
 $TESTING = false unless defined? $TESTING
 require 'net/imap'
+require 'yaml'
 require 'imap_sasl_plain'
 require 'optparse'
 
@@ -29,12 +30,7 @@ class IMAPClient
         exit 1
       end
 
-      File.readlines(opts_file).map { |l| l.chomp.split '=', 2 }.each do |k,v|
-        v = true  if v == 'true'
-        v = false if v == 'false'
-        v = Integer(v) rescue v
-        (options[k.intern] = v) rescue nil
-      end
+      options.merge! YAML.load(File.read(opts_file))
     end
 
     options[:SSL]      ||= true
@@ -127,7 +123,7 @@ class IMAPClient
         options[:Boxes] = boxes
       end
 
-      yield opts, options
+      yield opts, options if block_given?
 
       opts.on("-n", "--noop",
               "Perform no destructive operations",
@@ -161,13 +157,11 @@ class IMAPClient
 
     if options[:Host].nil? or
        options[:Password].nil? or
-       options[:Boxes].nil? or
        extra_options.any? { |k,v| options[k].nil? } then
       $stderr.puts opts
       $stderr.puts
       $stderr.puts "Host name not set"     if options[:Host].nil?
       $stderr.puts "Password not set"      if options[:Password].nil?
-      $stderr.puts "Boxes option not set"  if options[:Boxes].nil?
       extra_options.each do |k,(v,msg)|
         $stderr.puts msg if options[k].nil?
       end
@@ -212,9 +206,6 @@ class IMAPClient
 
     root = @root
     root += "/" unless root.empty?
-
-    boxes = options[:Boxes].split(/,\s*/)
-    @box_re = /^#{Regexp.escape root}#{Regexp.union(*boxes)}/
 
     connect options[:Host], options[:Port], options[:SSL],
             options[:Username], options[:Password], options[:Auth]
@@ -294,7 +285,10 @@ class IMAPClient
 
     mailboxes.reject! { |mailbox| mailbox.attr.include? :Noselect }
     mailboxes.map! { |mailbox| mailbox.name }
-    mailboxes.reject! { |mailbox| mailbox !~ @box_re }
+
+    box_re = /^#{Regexp.escape @root}#{Regexp.union(*@boxes)}/
+
+    mailboxes.reject! { |mailbox| mailbox !~ box_re }
     mailboxes = mailboxes.sort_by { |m| m.downcase }
     log "Found #{mailboxes.length} mailboxes to search:"
     mailboxes.each { |mailbox| log "\t#{mailbox}" } if @verbose
