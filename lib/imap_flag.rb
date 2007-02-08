@@ -96,7 +96,7 @@ class IMAPFlag < IMAPClient
   # Messages in response to messages I wrote in the selected mailbox.
 
   def responses_in_curr
-    log "Scanning for responses to messages I wrote"
+    log "  Scanning for responses to messages I wrote"
     my_mail = @email.map { |email| @imap.search [ 'FROM', email ] }.flatten
 
     return [] if my_mail.empty?
@@ -116,7 +116,7 @@ class IMAPFlag < IMAPClient
 
     messages.flatten!
 
-    log "Found #{messages.length} messages"
+    log "    Found #{messages.length} messages"
 
     return messages
   end

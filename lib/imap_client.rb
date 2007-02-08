@@ -308,9 +308,9 @@ class IMAPClient
   # (see Net::IMAP#select).  Logs 'Scanning for +message+' before searching.
 
   def search(query, message)
-    log "Scanning for #{message}"
+    log "  Scanning for #{message}"
     messages = @imap.search query
-    log "Found #{messages.length} messages"
+    log "    Found #{messages.length} messages"
     return messages
   end
 
