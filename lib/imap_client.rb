@@ -8,6 +8,11 @@ require 'optparse'
 # An IMAPClient used by IMAPFlag and IMAPCleanse.
 #
 # Probably not very reusable by you, but it has lots of example code.
+#
+# Reference:
+#
+#     email: http://www.ietf.org/rfc/rfc0822.txt
+#      imap: http://www.ietf.org/rfc/rfc3501.txt
 
 class IMAPClient
 

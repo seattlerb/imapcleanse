@@ -55,8 +55,6 @@ class IMAPFlag < IMAPClient
     super "Flagging messages", [:Flagged, AUTO_FLAG_KEYWORD]
   end
 
-  private
-
   ##
   # Searches for messages I answered and messages I wrote.
 
@@ -79,17 +77,16 @@ class IMAPFlag < IMAPClient
     ], 'answered messages'
   end
 
+  def all_email
+    @email.map { |e| "FROM #{e}" }.inject { |s,e| "OR #{s} #{e}" }
+  end
+
   ##
   # Messages I wrote in the selected mailbox.
 
   def wrote_in_curr
-    @email.map { |email|
-      search [
-              'FROM', email,
-              'NOT', 'FLAGGED',
-              'NOT', 'KEYWORD', AUTO_FLAG_KEYWORD
-             ], "messages by #{email}"
-    }
+    search("#{self.all_email} NOT FLAGGED NOT KEYWORD AUTO_FLAG_KEYWORD",
+           "messages by #{@email.join(", ")}")
   end
 
   ##
@@ -97,7 +94,7 @@ class IMAPFlag < IMAPClient
 
   def responses_in_curr
     log "  Scanning for responses to messages I wrote"
-    my_mail = @email.map { |email| @imap.search [ 'FROM', email ] }.flatten
+    my_mail = @imap.search self.all_email
 
     return [] if my_mail.empty?
 
