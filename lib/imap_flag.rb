@@ -27,14 +27,6 @@ class IMAPFlag < IMAPClient
   MESSAGE_ID = 'HEADER.FIELDS (MESSAGE-ID)'
 
   ##
-  # Handles processing of +args+.
-
-  def self.process_args(args)
-    extra_options = { }
-    super args, extra_options
-  end
-
-  ##
   # Creates a new IMAPFlag from +options+.
   #
   # Options include:

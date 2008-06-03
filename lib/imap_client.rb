@@ -3,6 +3,7 @@ require 'net/imap'
 require 'yaml'
 require 'imap_sasl_plain'
 require 'optparse'
+require 'enumerator'
 
 ##
 # An IMAPClient used by IMAPFlag and IMAPCleanse.
@@ -24,7 +25,7 @@ class IMAPClient
   ##
   # Handles processing of +args+.
 
-  def self.process_args(args, extra_options)
+  def self.process_args(args, extra_options = {})
     opts_file = File.expand_path '~/.imap_cleanse'
     options = {}
 
@@ -241,14 +242,13 @@ class IMAPClient
 
       message_count += messages.length
 
-      if @noop then
-        log "Noop - doing nothing"
-        next
+      unless @noop then
+        mark messages, flags
+      else
+        log "Noop - not marking"
       end
 
-      mark messages, flags
-
-      yield if block_given?
+      yield messages if block_given?
     end
 
     log "Done. Found #{message_count} messages in #{mailboxes.length} mailboxes"
@@ -324,12 +324,9 @@ class IMAPClient
   # (see Net::IMAP#store).
 
   def mark(messages, flags)
-    until messages.empty? do
-      chunk = messages.slice! 0, 500
+    messages.each_slice(500) do |chunk|
       @imap.store chunk, '+FLAGS.SILENT', flags
     end
     log "Marked messages with flags"
   end
-
 end
-

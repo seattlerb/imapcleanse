@@ -12,15 +12,6 @@ require 'imap_client'
 class IMAPCleanse < IMAPClient
 
   ##
-  # Handles processing of +args+.
-
-  def self.process_args(args)
-    extra_options = { }
-
-    super args, extra_options
-  end
-
-  ##
   # Creates a new IMAPCleanse from +options+.
   #
   # Options include:
