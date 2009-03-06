@@ -12,6 +12,8 @@ IMAPFlag flags messages I find interesting so I don\'t have to!'
   s.rubyforge_name = 'seattlerb'
   s.url = 'http://seattlerb.rubyforge.org/IMAPCleanse'
 
+  s.testlib = :minitest
+
   s.extra_deps << 'rbayes'
 end
 

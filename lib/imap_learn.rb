@@ -2,7 +2,17 @@ require 'imap_client'
 require 'fileutils'
 
 require 'rubygems'
-require 'rbayes'
+
+begin
+  require 'rbayes'
+rescue LoadError
+  # ignoring
+  class RBayes
+    def initialize *args
+      # nothing to do
+    end
+  end
+end
 
 ##
 # IMAPLearn flags messages per-folder based on what you've flagged before.

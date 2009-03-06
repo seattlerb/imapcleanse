@@ -291,9 +291,9 @@ class IMAPClient
     mailboxes.reject! { |mailbox| mailbox.attr.include? :Noselect }
     mailboxes.map! { |mailbox| mailbox.name }
 
-    box_re = /^#{Regexp.escape @root}#{Regexp.union(*@boxes)}/
+    @box_re = /^#{Regexp.escape @root}#{Regexp.union(*@boxes)}/
 
-    mailboxes.reject! { |mailbox| mailbox !~ box_re }
+    mailboxes.reject! { |mailbox| mailbox !~ @box_re }
     mailboxes = mailboxes.sort_by { |m| m.downcase }
     log "Found #{mailboxes.length} mailboxes to search:"
     mailboxes.each { |mailbox| log "\t#{mailbox}" } if @verbose

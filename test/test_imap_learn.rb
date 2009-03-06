@@ -1,12 +1,11 @@
-require 'test/unit'
+require 'rubygems'
+require 'minitest/autorun'
 
 $TESTING = true
 
 require 'imap_learn'
 
-class TestIMAPLearn < Test::Unit::TestCase
-
-  undef_method :default_test
+class TestIMAPLearn < MiniTest::Unit::TestCase
 
 end
 
