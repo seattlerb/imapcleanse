@@ -1,4 +1,7 @@
 require 'hoe'
+
+Hoe.add_include_dirs("../../minitest/dev/lib")
+
 $: << './lib'
 require 'imap_client'
 
