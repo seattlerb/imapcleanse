@@ -49,7 +49,7 @@ class IMAPClient
       options[k]       ||= v
     end
 
-    opts = OptionParser.new do |opts|
+    op = OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename $0} [options]"
       opts.separator ''
       opts.separator 'Options may also be set in the options file ~/.imap_cleanse.'
@@ -157,14 +157,14 @@ class IMAPClient
       opts.separator ''
     end
 
-    opts.parse! args
+    op.parse! args
 
     options[:Port] ||= options[:SSL] ? 993 : 143
 
     if options[:Host].nil? or
        options[:Password].nil? or
        extra_options.any? { |k,v| options[k].nil? } then
-      $stderr.puts opts
+      $stderr.puts op
       $stderr.puts
       $stderr.puts "Host name not set"     if options[:Host].nil?
       $stderr.puts "Password not set"      if options[:Password].nil?
@@ -262,7 +262,7 @@ class IMAPClient
   # with PLAIN auth on SSL sockets, sorry.
 
   def connect(host, port, ssl, username, password, auth = nil)
-    @imap = Net::IMAP.new host, port, ssl
+    @imap = Net::IMAP.new host, port, ssl, nil, false
     log "Connected to #{host}:#{port}"
 
     if auth.nil? then

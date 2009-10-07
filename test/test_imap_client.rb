@@ -17,7 +17,7 @@ class Net::IMAP
 
   attr_accessor :host, :port, :ssl
 
-  def initialize(host, port, ssl)
+  def initialize(host, port, ssl, certs, verify)
     @host = host
     @port = port
     @ssl = ssl

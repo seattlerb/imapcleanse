@@ -56,7 +56,7 @@ class Net::IMAP::PlainAuthenticator
     @password = password
   end
 
-end
+end unless Net::IMAP::const_defined? :PlainAuthenticator
 
 if defined? OpenSSL then
   Net::IMAP.add_authenticator 'PLAIN', Net::IMAP::PlainAuthenticator

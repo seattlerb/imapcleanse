@@ -43,9 +43,9 @@ class IMAPCleanse < IMAPClient
   # selected mailbox (see Net::IMAP#select).
 
   def find_messages
-    box = @boxes.find { |box| @mailbox =~ /#{box}/ } # TODO: needs more work
-    raise unless box
-    age = @cleanse[box]
+    mailbox = @boxes.find { |box| @mailbox =~ /#{box}/ } # TODO: needs more work
+    raise unless mailbox
+    age = @cleanse[mailbox]
     before_date = (Time.now - 86400 * age).imapdate
 
     search [
