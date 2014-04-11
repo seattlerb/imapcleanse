@@ -12,7 +12,6 @@ Hoe.new 'IMAPCleanse', IMAPClient::VERSION do |s|
 IMAPFlag flags messages I find interesting so I don\'t have to!'
   s.author = 'Eric Hodel'
   s.email = 'drbrain@segment7.net'
-  s.rubyforge_name = 'seattlerb'
   s.url = 'http://seattlerb.rubyforge.org/IMAPCleanse'
 
   s.testlib = :minitest
