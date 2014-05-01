@@ -1,5 +1,9 @@
 = IMAPCleanse
 
+= END OF LIFE
+
+This project is EOL'd and has been superseded by imap_processor.
+
 Rubyforge Project:
 
 http://rubyforge.org/projects/seattlerb/
